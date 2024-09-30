@@ -1,1 +1,219 @@
-d
+#include <iostream>
+using namespace std;
+
+class book
+{
+    int cost;
+    string tt, aut;
+public:
+    void accept();
+    void display();
+    void displayA(int n);
+    void displayD(int n);
+    void cpyless(int n);
+    void deleteT(int &n);
+    int count(int n);
+} b[100];
+
+void book::accept()
+{
+    cout << "\nEnter the Title: ";
+    cin >> tt;
+    cout << "Enter the Author Name: ";
+    cin >> aut;
+    cout << "Enter the cost: ";
+    cin >> cost;
+}
+
+void book::display()
+{
+    cout << "\n" << tt << "\t" << aut << "\t" << cost;
+}
+
+void book::displayA(int n)
+{
+    book temp;
+    for(int i = 0; i < n - 1; i++)
+    {
+        for(int j = i + 1; j < n; j++)
+        {
+            if(b[i].cost > b[j].cost)
+            {
+                temp = b[i];
+                b[i] = b[j];
+                b[j] = temp;
+            }
+        }
+    }
+    for(int i = 0; i < n; i++)
+    {
+        b[i].display();
+    }
+}
+
+void book::displayD(int n)
+{
+    book temp;
+    for(int i = 0; i < n - 1; i++)
+    {
+        for(int j = i + 1; j < n; j++)
+        {
+            if(b[i].cost < b[j].cost)
+            {
+                temp = b[i];
+                b[i] = b[j];
+                b[j] = temp;
+            }
+        }
+    }
+    for(int i = 0; i < n; i++)
+    {
+        b[i].display();
+    }
+}
+
+void book::cpyless(int n)
+{
+    int j = 0;
+    book c[100];
+    for(int i = 0; i < n; i++)
+    {
+        if(b[i].cost < 500)
+        {
+            c[j] = b[i];
+            j++;
+        }
+    }
+    for(int i = 0; i < j; i++)
+    {
+        c[i].display();
+    }
+}
+
+int book::count(int n)
+{
+    int countt = 0;
+    for(int i = 0; i < n; i++)
+    {
+        if(b[i].cost > 500)
+        {
+            countt++;
+        }
+    }
+    cout << "The number of books having a price greater than 500 is " << countt << endl;
+    return countt;
+}
+
+void book::deleteT(int &n)
+{
+    book tempArray[100];
+    int uniqueCount = 0;
+
+    for(int i = 0; i < n; i++)
+    {
+        bool isDuplicate = false;
+
+        for(int j = 0; j < uniqueCount; j++)
+        {
+            if(b[i].tt == tempArray[j].tt && b[i].aut == tempArray[j].aut)
+            {
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if(!isDuplicate)
+        {
+            tempArray[uniqueCount] = b[i];
+            uniqueCount++;
+        }
+    }
+
+    for(int i = 0; i < uniqueCount; i++)
+    {
+        b[i] = tempArray[i];
+    }
+
+    n = uniqueCount; // Update the number of unique books
+    cout << "\nUnique records after deletion:\n";
+    cout << "\nName\tAuthor\tCost";
+    for(int i = 0; i < n; i++)
+    {
+        b[i].display();
+    }
+}
+
+int main()
+{
+    int n = 0, choice;
+
+    while(true)
+    {
+        cout << "\nMenu.\n1.Accept Book Record.\n2.Display Record.\n3.Display in ascending order.\n4.Display in descending order.\n5.Display less than 500.\n6.Delete duplicate record.\n7.Count greater than 500.\n8.Exit.";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch(choice)
+        {
+        case 1:
+            cout << "Enter the number of records you want to create: ";
+            cin >> n;
+            for(int i = 0; i < n; i++)
+            {
+                b[i].accept();
+            }
+            break;
+
+        case 2:
+            cout << "\nName\tAuthor\tCost";
+            for(int i = 0; i < n; i++)
+            {
+                b[i].display();
+            }
+            break;
+
+        case 3:
+            cout << "\nName\tAuthor\tCost";
+
+            b[0].displayA(n);
+
+            break;
+
+        case 4:
+            cout << "\nName\tAuthor\tCost";
+
+            b[0].displayD(n);
+
+            break;
+
+        case 5:
+            cout << "\nName\tAuthor\tCost";
+
+            b[0].cpyless(n);
+
+            break;
+
+        case 6:
+
+            b[0].deleteT(n);
+
+            break;
+
+        case 7:
+            b[0].count(n);
+            break;
+
+        case 8:
+            return 0;
+
+        default:
+            cout << "Wrong choice";
+        }
+
+        cout << "\nDo you want to continue (1/0): ";
+        cin >> choice;
+        if (choice == 0) break;
+    }
+
+    return 0;
+}
